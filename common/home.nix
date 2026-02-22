@@ -127,7 +127,13 @@ in
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.user-themes
-    gnomeExtensions.runcat
+    (gnomeExtensions.runcat.overrideAttrs (old: {
+      postFixup = (old.postFixup or "") + ''
+        substituteInPlace $out/share/gnome-shell/extensions/runcat@kolesnikov.se/extension.js \
+          --replace-fail "MainPanel.addToStatusArea('runcat-indicator', this.#indicator)" \
+                         "MainPanel.addToStatusArea('runcat-indicator', this.#indicator, -1, 'left')"
+      '';
+    }))
     (pkgs.stdenvNoCC.mkDerivation {
       pname = "gnome-shell-extension-claude-code-usage";
       version = "3";

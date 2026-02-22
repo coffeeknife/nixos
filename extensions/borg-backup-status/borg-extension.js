@@ -54,7 +54,7 @@ export default class BorgBackupStatusExtension extends Extension {
     });
     this._indicator.menu.addMenuItem(unmount);
 
-    Main.panel.addToStatusArea(this.uuid, this._indicator);
+    Main.panel.addToStatusArea(this.uuid, this._indicator, -1, 'left');
     this._update();
     this._timerId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 300, () => {
       this._update();
