@@ -1,4 +1,5 @@
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
 import St from 'gi://St';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
@@ -71,36 +72,41 @@ export default class BorgBackupStatusExtension extends Extension {
 
   _update() {
     try {
-      let [ok, stdout] = GLib.spawn_command_line_sync(
-        'systemctl --user show borgbackup-home.service --property=ActiveState,ExecMainStatus,ExecMainExitTimestamp'
+      // Check if a backup is currently running (fast local call, fine to be sync)
+      let [ok1, out1] = GLib.spawn_command_line_sync(
+        'systemctl --user is-active borgbackup-home.service'
       );
-      if (!ok) return;
-      let props = {};
-      for (let line of new TextDecoder().decode(stdout).split('\n')) {
-        let i = line.indexOf('=');
-        if (i > 0) props[line.substring(0, i)] = line.substring(i + 1);
-      }
-      let active = props['ActiveState'];
-      let exit = props['ExecMainStatus'];
-      let ts = props['ExecMainExitTimestamp'];
-      if (active === 'active' || active === 'activating') {
+      let state = ok1 ? new TextDecoder().decode(out1).trim() : '';
+      if (state === 'active' || state === 'activating') {
         this._icon.icon_name = 'emblem-synchronizing-symbolic';
         this._label.text = ' Backing up\u2026';
         this._statusItem.label.text = 'Backup in progress\u2026';
         this._updateSoon();
-      } else if (exit === '0' && ts) {
-        this._icon.icon_name = 'emblem-ok-symbolic';
-        this._label.text = ' ' + this._relative(ts);
-        this._statusItem.label.text = 'Last backup: ' + this._relative(ts);
-      } else if (exit && exit !== '0') {
-        this._icon.icon_name = 'dialog-warning-symbolic';
-        this._label.text = ' Backup failed';
-        this._statusItem.label.text = 'Last backup failed';
-      } else {
-        this._icon.icon_name = 'drive-harddisk-symbolic';
-        this._label.text = '';
-        this._statusItem.label.text = 'No backup yet';
+        return;
       }
+
+      // Query borg repo over SSH asynchronously
+      let proc = Gio.Subprocess.new(
+        ['borg-last-backup'],
+        Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE
+      );
+      proc.communicate_utf8_async(null, null, (p, res) => {
+        try {
+          let [, stdout] = p.communicate_utf8_finish(res);
+          if (!this._indicator) return;
+          let ts = (stdout || '').trim();
+          if (ts) {
+            this._icon.icon_name = 'emblem-ok-symbolic';
+            let rel = this._relative(ts);
+            this._label.text = ' ' + rel;
+            this._statusItem.label.text = 'Last backup: ' + rel;
+          } else {
+            this._icon.icon_name = 'drive-harddisk-symbolic';
+            this._label.text = '';
+            this._statusItem.label.text = 'No backup yet';
+          }
+        } catch (e) { logError(e, 'BorgBackupStatus'); }
+      });
     } catch (e) { logError(e, 'BorgBackupStatus'); }
   }
 

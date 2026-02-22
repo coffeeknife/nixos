@@ -60,7 +60,9 @@ in
           ms-kubernetes-tools.vscode-kubernetes-tools
           redhat.vscode-yaml
         ]);
-        userSettings = vscodeSharedSettings;
+        userSettings = vscodeSharedSettings // {
+          "redhat.telemetry.enabled" = false;
+        };
       };
     };
   };

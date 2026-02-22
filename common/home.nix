@@ -84,6 +84,12 @@ in
     libreoffice
     borgbackup
     libsecret
+    (pkgs.writeShellScriptBin "borg-last-backup" ''
+      export BORG_REPO="${borgRepo}"
+      export BORG_RSH="${pkgs.openssh}/bin/ssh -i ${borgKeyFile}"
+      export BORG_PASSCOMMAND="${secretTool} lookup application borg key ${borgKeyringAttr}"
+      ${pkgs.borgbackup}/bin/borg list --last 1 --format '{time}' 2>/dev/null
+    '')
     (pkgs.writeShellScriptBin "borg-browse" ''
       set -euo pipefail
       export BORG_REPO="${borgRepo}"
