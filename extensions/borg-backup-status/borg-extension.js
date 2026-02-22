@@ -78,7 +78,7 @@ export default class BorgBackupStatusExtension extends Extension {
       );
       let state = ok1 ? new TextDecoder().decode(out1).trim() : '';
       if (state === 'active' || state === 'activating') {
-        this._icon.icon_name = 'emblem-synchronizing-symbolic';
+        this._icon.icon_name = 'content-loading-symbolic';
         this._label.text = ' Backing up\u2026';
         this._statusItem.label.text = 'Backup in progress\u2026';
         this._updateSoon();
@@ -96,7 +96,7 @@ export default class BorgBackupStatusExtension extends Extension {
           if (!this._indicator) return;
           let ts = (stdout || '').trim();
           if (ts) {
-            this._icon.icon_name = 'emblem-ok-symbolic';
+            this._icon.icon_name = 'checkmark-symbolic';
             let rel = this._relative(ts);
             this._label.text = ' ' + rel;
             this._statusItem.label.text = 'Last backup: ' + rel;
