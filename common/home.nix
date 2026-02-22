@@ -29,6 +29,7 @@ in
     jq
     usbutils
     pciutils
+    go
 
     # apps
     (appimageTools.wrapType2 rec {
