@@ -13,6 +13,11 @@ in
   home.username = "robin";
   home.homeDirectory = "/home/robin";
 
+  home.file.".face" = {
+    source = ../ratio.jpg;
+    target = ".face";
+  };
+
   home.sessionVariables = {
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
   };
