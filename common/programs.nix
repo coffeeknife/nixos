@@ -80,9 +80,12 @@ in
     ];
   };
 
-  home.file.".config/BraveSoftware/Brave-Browser/Default/Preferences".text = builtins.toJSON {
-    profile.password_manager_enabled = false;
-    autofill.enabled = false;
+  home.file.".config/BraveSoftware/Brave-Browser/Default/Preferences" = {
+    force = true;
+    text = builtins.toJSON {
+      profile.password_manager_enabled = false;
+      autofill.enabled = false;
+    };
   };
 
   programs.vesktop = {
