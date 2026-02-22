@@ -14,8 +14,7 @@
 
   # Auto-toggle WireGuard VPN based on WiFi SSID
   networking.networkmanager.dispatcherScripts = [{
-    source = pkgs.writeText "vpn-toggle" ''
-      #!/bin/bash
+    source = pkgs.writeShellScript "vpn-toggle" ''
       IFACE="$1"
       ACTION="$2"
 

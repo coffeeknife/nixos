@@ -62,6 +62,7 @@ in
         ]);
         userSettings = vscodeSharedSettings // {
           "redhat.telemetry.enabled" = false;
+          "vs-kubernetes.vs-kubernetes.crd-code-completion" = "enabled";
         };
       };
     };
