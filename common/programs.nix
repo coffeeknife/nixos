@@ -78,13 +78,18 @@ in
     ];
   };
 
+  home.file.".config/BraveSoftware/Brave-Browser/Default/Preferences".text = builtins.toJSON {
+    profile.password_manager_enabled = false;
+    autofill.enabled = false;
+  };
+
   programs.vesktop = {
     enable = true;
     settings = {
       tray = true;
       minimizeToTray = true;
       arRPC = true;
-      hardwareAcceleration = true;
+      hardwareAcceleration = true; 
       customTitleBar = true;
       autoStartMinimized = true;
     };
