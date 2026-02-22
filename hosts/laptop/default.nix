@@ -18,19 +18,23 @@
       IFACE="$1"
       ACTION="$2"
 
-      case "$IFACE" in wg*|Home) exit 0 ;; esac
+      # Only act on wifi interfaces
+      case "$IFACE" in wl*) ;; *) exit 0 ;; esac
 
       # Do nothing if the VPN connection doesn't exist yet
       ${pkgs.networkmanager}/bin/nmcli -t -f NAME connection show | grep -qx "Home" || exit 0
 
       case "$ACTION" in
-        up|connectivity-change)
+        up)
           SSID=$(${pkgs.networkmanager}/bin/nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
           if [ "$SSID" = "Everkeep" ]; then
-            ${pkgs.networkmanager}/bin/nmcli connection down "Home" 2>/dev/null || true
+            ${pkgs.networkmanager}/bin/nmcli connection down "Home" 2>/dev/null &
           else
-            ${pkgs.networkmanager}/bin/nmcli connection up "Home" 2>/dev/null || true
+            ${pkgs.networkmanager}/bin/nmcli connection up "Home" 2>/dev/null &
           fi
+          ;;
+        down)
+          ${pkgs.networkmanager}/bin/nmcli connection down "Home" 2>/dev/null &
           ;;
       esac
     '';
