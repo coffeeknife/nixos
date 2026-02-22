@@ -1,5 +1,24 @@
 { config, pkgs, ... }:
 
+let
+  vscodeSharedExtensions = with pkgs.vscode-extensions; [
+    catppuccin.catppuccin-vsc
+    anthropic.claude-code
+    file-icons.file-icons
+  ];
+  
+  vscodeSharedSettings = {
+    "editor.fontFamily" = "'JetBrainsMono Nerd Font', monospace";
+    "editor.fontSize" = 14;
+    "workbench.colorTheme" = "Catppuccin Mocha";
+    "workbench.iconTheme" = "file-icons";
+    "git.confirmSync" = false;
+    "git.autofetch" = true;
+    "git.autoStash" = true;
+    "git.enableSmartCommit" = true;
+    "claudeCode.preferredLocation" = "panel";
+  };
+in
 {
   programs.git = {
     enable = true;
@@ -21,24 +40,27 @@
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
-    profiles.default = {
-      extensions = with pkgs.vscode-extensions; [
-        catppuccin.catppuccin-vsc
-        anthropic.claude-code
-        jnoortheen.nix-ide
-        file-icons.file-icons
-        tamasfe.even-better-toml
-      ];
-      userSettings = {
-        "editor.fontFamily" = "'JetBrainsMono Nerd Font', monospace";
-        "editor.fontSize" = 14;
-        "workbench.colorTheme" = "Catppuccin Mocha";
-        "workbench.iconTheme" = "file-icons";
-        "git.confirmSync" = false;
-        "git.autofetch" = true;
-        "git.autoStash" = true;
-        "git.enableSmartCommit" = true;
-        "claudeCode.preferredLocation" = "panel";
+    
+    profiles = {
+      default = {
+        extensions = vscodeSharedExtensions;
+        userSettings = vscodeSharedSettings;
+      };
+
+      nixos = {
+        extensions = vscodeSharedExtensions ++ (with pkgs.vscode-extensions; [ 
+          jnoortheen.nix-ide 
+          tamasfe.even-better-toml
+        ]);
+        userSettings = vscodeSharedSettings;
+      };
+
+      kubernetes = {
+        extensions = vscodeSharedExtensions ++ (with pkgs.vscode-extensions; [
+          ms-kubernetes-tools.vscode-kubernetes-tools
+          redhat.vscode-yaml
+        ]);
+        userSettings = vscodeSharedSettings;
       };
     };
   };
@@ -102,5 +124,4 @@
       "vulcan".hostname = "192.168.1.69";
     };
   };
-
 }
