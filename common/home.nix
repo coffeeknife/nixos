@@ -286,7 +286,7 @@ in
       };
       "org/gnome/Console" = {
         use-system-font = false;
-        custom-font = "JetBrains Mono Nerd Font 12";
+        custom-font = "JetBrainsMono Nerd Font 12";
       };
       "org/gnome/desktop/background" = {
         picture-uri-dark = "file:///home/robin/.wallpaper";
