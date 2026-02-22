@@ -1,0 +1,9 @@
+# Editor
+.vscode/
+
+# Claude
+.claude/
+
+# Nix
+result
+.direnv
