@@ -289,6 +289,7 @@ in
           "org.gnome.Settings.desktop"
           "org.gnome.Nautilus.desktop"
           "brave-browser.desktop"
+          "org.gnome.Calendar.desktop"
           "proton-mail.desktop"
           "vesktop.desktop"
           "org.gnome.Console.desktop"
