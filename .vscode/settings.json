@@ -1,0 +1,9 @@
+{
+  "statusBar.items": [],
+  "VsCodeTaskButtons.tasks": [
+    {
+      "label": "$(gear) Rebuild NixOS",
+      "task": "NixOS Rebuild Switch"
+    }
+  ]
+}
