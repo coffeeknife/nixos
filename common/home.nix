@@ -72,6 +72,7 @@ in
           --replace-fail 'Exec=AppRun' 'Exec=bambu-studio'
       '';
     })
+    orca-slicer
     freecad
     claude-code
     bitwarden-desktop
