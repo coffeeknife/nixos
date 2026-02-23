@@ -30,6 +30,7 @@ in
     # utilities
     fastfetch
     kubectl
+    kubernetes-helm
     fluxcd
     jq
     usbutils
