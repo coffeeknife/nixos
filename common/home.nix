@@ -281,6 +281,7 @@ in
           "vesktop.desktop"
           "org.gnome.Console.desktop"
           "BambuStudio.desktop"
+          "OrcaSlicer.desktop"
           "codium.desktop"
           "pycharm.desktop"
           "org.freecad.FreeCAD.desktop"
