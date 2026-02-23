@@ -48,10 +48,19 @@ in
       };
 
       nixos = {
-        extensions = vscodeSharedExtensions ++ (with pkgs.vscode-extensions; [ 
-          jnoortheen.nix-ide 
+        extensions = vscodeSharedExtensions ++ (with pkgs.vscode-extensions; [
+          jnoortheen.nix-ide
           tamasfe.even-better-toml
-        ]);
+        ]) ++ [
+          (pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+            mktplcRef = {
+              publisher = "spencerwmiles";
+              name = "vscode-task-buttons";
+              version = "1.4.2";
+              sha256 = "sha256-rHaWhNrVBmpuU44VePXwtWBHWsAxB3/lqxkSjDIU7AE=";
+            };
+          })
+        ];
         userSettings = vscodeSharedSettings;
       };
 
