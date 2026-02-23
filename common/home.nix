@@ -276,6 +276,7 @@ in
           "org.gnome.Settings.desktop"
           "org.gnome.Nautilus.desktop"
           "brave-browser.desktop"
+          "proton-mail.desktop"
           "vesktop.desktop"
           "org.gnome.Console.desktop"
           "BambuStudio.desktop"
