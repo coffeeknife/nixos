@@ -192,6 +192,17 @@ in
   ];
 
   xdg.desktopEntries = {
+    OrcaSlicer = {
+      name = "OrcaSlicer";
+      genericName = "3D Printing Software";
+      icon = "${pkgs.orca-slicer}/share/icons/hicolor/192x192/apps/OrcaSlicer.png";
+      exec = "orca-slicer %U";
+      terminal = false;
+      categories = [ "Graphics" "3DGraphics" "Engineering" ];
+      mimeType = [ "model/stl" "model/3mf" "application/vnd.ms-3mfdocument" "application/prs.wavefront-obj" "application/x-amf" "x-scheme-handler/orcaslicer" ];
+      startupNotify = false;
+      settings.StartupWMClass = "orca-slicer";
+    };
     borg-browse = {
       name = "Browse Backups";
       comment = "Mount and browse borg backup archives";
