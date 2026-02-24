@@ -215,6 +215,7 @@ in
     jetbrains-mono
     nerd-fonts.jetbrains-mono
     nerd-fonts.caskaydia-cove
+    noto-fonts-cjk-sans
   ];
 
   xdg.desktopEntries = {
