@@ -73,6 +73,22 @@ in
           --replace-fail 'Exec=AppRun' 'Exec=bambu-studio'
       '';
     })
+    (appimageTools.wrapType2 {
+      name = "Cider";
+      pname = "cider";
+      version = "3.1.8";
+
+      src = pkgs.requireFile {
+        name = "cider-v3.1.8-linux-x64.AppImage";
+        sha256 = "b3508c6007c350b684c8ed23660b80d9b03b0fba20a91478bff2e4303fa5b8ac"; # replace with real hash
+        message = ''
+          Cider 2 must be downloaded manually from itch.io.
+          Download it from https://https://taproom.cider.sh/dashboard
+          Then add it to the Nix store:
+            nix-store --add-fixed sha256 /path/to/Cider-linux-x64.AppImage
+        '';
+      };
+    })
     orca-slicer
     freecad
     element-desktop
@@ -230,6 +246,14 @@ in
       exec = "borg-umount";
       terminal = false;
       categories = [ "Utility" ];
+    };
+    cider = {
+      name = "Cider";
+      genericName = "Music Player";
+      exec = "cider";
+      terminal = false;
+      categories = [ "Audio" "Music" "Player" "AudioVideo" ];
+      comment = "Apple Music client";
     };
   };
 
