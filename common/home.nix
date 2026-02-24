@@ -395,7 +395,7 @@ in
   systemd.user.timers.borgbackup-home = {
     Unit.Description = "Daily borg backup";
     Timer = {
-      OnCalendar = "daily";
+      OnUnitActiveSec = "24h";
       Persistent = true;
     };
     Install.WantedBy = [ "timers.target" ];
