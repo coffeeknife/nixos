@@ -75,13 +75,7 @@ in
     })
     orca-slicer
     freecad
-    (let cinnyIcon = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/cinnyapp/cinny/dev/public/res/svg/cinny.svg";
-      sha256 = "sha256-/fmgQMIamYZPNvQH/lW6iImXeKBKI188q4w5G+cJBB8=";
-    }; in pkgs.runCommand "cinny-pwa" {} ''
-      mkdir -p $out/share/icons/hicolor/scalable/apps
-      cp ${cinnyIcon} $out/share/icons/hicolor/scalable/apps/cinny.svg
-    '')
+    element-desktop
     claude-code
     bitwarden-desktop
     (protonmail-desktop.overrideAttrs (oldAttrs: {
@@ -211,16 +205,6 @@ in
       startupNotify = false;
       settings.StartupWMClass = "orca-slicer";
     };
-    cinny-desktop = {
-      name = "Cinny";
-      genericName = "Matrix Client";
-      comment = "Yet another Matrix client";
-      icon = "cinny";
-      exec = "brave --app=https://app.cinny.in";
-      terminal = false;
-      categories = [ "Network" "Chat" ];
-      settings.StartupWMClass = "app.cinny.in";
-    };
     borg-browse = {
       name = "Browse Backups";
       comment = "Mount and browse borg backup archives";
@@ -309,7 +293,7 @@ in
           "org.gnome.Calendar.desktop"
           "proton-mail.desktop"
           "vesktop.desktop"
-          "cinny-desktop.desktop"
+          "element-desktop.desktop"
           "org.gnome.Console.desktop"
           "BambuStudio.desktop"
           "OrcaSlicer.desktop"
