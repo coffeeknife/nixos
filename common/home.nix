@@ -295,10 +295,9 @@ in
           "vesktop.desktop"
           "element-desktop.desktop"
           "org.gnome.Console.desktop"
+          "codium.desktop"
           "BambuStudio.desktop"
           "OrcaSlicer.desktop"
-          "codium.desktop"
-          "pycharm.desktop"
           "org.freecad.FreeCAD.desktop"
         ];
       };
