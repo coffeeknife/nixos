@@ -141,6 +141,8 @@ in
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.user-themes
+    gnomeExtensions.desktop-icons-ng-ding
+    gnomeExtensions.edit-desktop-files
     (gnomeExtensions.runcat.overrideAttrs (old: {
       postFixup = (old.postFixup or "") + ''
         substituteInPlace $out/share/gnome-shell/extensions/runcat@kolesnikov.se/extension.js \
@@ -282,6 +284,8 @@ in
           dash-to-dock.extensionUuid
           appindicator.extensionUuid
           user-themes.extensionUuid
+          desktop-icons-ng-ding.extensionUuid
+          edit-desktop-files.extensionUuid
           runcat.extensionUuid
           "claude-code-usage@haletran.com"
           "borg-backup-status@coffeeknife"
