@@ -73,7 +73,7 @@ in
           --replace-fail 'Exec=AppRun' 'Exec=bambu-studio'
       '';
     })
-    (appimageTools.wrapType2 {
+    (appimageTools.wrapType2 rec {
       name = "Cider";
       pname = "cider";
       version = "3.1.8";
@@ -88,6 +88,12 @@ in
             nix-store --add-fixed sha256 /path/to/Cider-linux-x64.AppImage
         '';
       };
+
+      extraInstallCommands = let
+        appimageContents = pkgs.appimageTools.extract { inherit pname version src; };
+      in ''
+        install -m 444 -D ${appimageContents}/Cider.png $out/share/icons/hicolor/256x256/apps/cider.png
+      '';
     })
     orca-slicer
     freecad
@@ -250,10 +256,12 @@ in
     cider = {
       name = "Cider";
       genericName = "Music Player";
+      icon = "cider";
       exec = "cider";
       terminal = false;
       categories = [ "Audio" "Music" "Player" "AudioVideo" ];
       comment = "Apple Music client";
+      settings.StartupWMClass = "cider";
     };
   };
 
@@ -324,6 +332,7 @@ in
           "element-desktop.desktop"
           "org.gnome.Console.desktop"
           "codium.desktop"
+          "cider.desktop"
           "BambuStudio.desktop"
           "OrcaSlicer.desktop"
           "org.freecad.FreeCAD.desktop"
