@@ -75,11 +75,13 @@
     pulse.enable = true;
   };
 
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.robin = {
     isNormalUser = true;
     description = "Robin";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     initialPassword = "Eevee"; # that's my cat
   };
 
