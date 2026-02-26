@@ -97,7 +97,7 @@ in
       '';
     })
     orca-slicer
-    freecad
+
     element-desktop
     claude-code
     bitwarden-desktop
@@ -340,7 +340,6 @@ in
           "cider.desktop"
           "BambuStudio.desktop"
           "OrcaSlicer.desktop"
-          "org.freecad.FreeCAD.desktop"
         ];
       };
       "org/gnome/desktop/interface" = {
