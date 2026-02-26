@@ -142,6 +142,10 @@ in
       };
       "gallifrey".hostname = "192.168.1.54";
       "vulcan".hostname = "192.168.1.69";
+      "matrix" = {
+        hostname = "159.65.166.241";
+        user = "root";
+      };
     };
   };
 }
