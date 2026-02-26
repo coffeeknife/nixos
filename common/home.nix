@@ -162,6 +162,7 @@ in
     gnome-catppuccin
     gnome-remote-desktop
     gnomeExtensions.blur-my-shell
+    gnomeExtensions.gsconnect
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.user-themes
@@ -322,6 +323,7 @@ in
           desktop-icons-ng-ding.extensionUuid
           edit-desktop-files.extensionUuid
           runcat.extensionUuid
+          gsconnect.extensionUuid
           "claude-code-usage@haletran.com"
           "borg-backup-status@coffeeknife"
         ];
