@@ -160,6 +160,7 @@ in
     fairywren
     gnome-tweaks
     gnome-catppuccin
+    gnome-remote-desktop
     gnomeExtensions.blur-my-shell
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
