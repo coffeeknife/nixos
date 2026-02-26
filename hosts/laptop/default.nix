@@ -11,6 +11,7 @@
   # fingerprint scanner (138a:0097 needs python-validity + open-fprintd)
   services.python-validity.enable = true;
   services.open-fprintd.enable = true;
+  security.pam.services.sudo.fprintAuth = true;
 
   # Auto-toggle WireGuard VPN based on WiFi SSID
   networking.networkmanager.dispatcherScripts = [{
