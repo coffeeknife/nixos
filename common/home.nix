@@ -1,4 +1,4 @@
-{ config, pkgs, lib, hostname, ... }:
+{ config, pkgs, pkgs-stable, lib, hostname, ... }:
 let
   borgRepo = "ssh://robin@vulcan/mnt/birdpool/backup/devices/${hostname}";
   borgKeyFile = "${config.home.homeDirectory}/.ssh/borg_ed25519";
@@ -96,7 +96,7 @@ in
       '';
     })
     orca-slicer
-
+    pkgs-stable.openscad
     element-desktop
     claude-code
     bitwarden-desktop
@@ -339,6 +339,7 @@ in
           "cider.desktop"
           "BambuStudio.desktop"
           "OrcaSlicer.desktop"
+          "openscad.desktop"
         ];
       };
       "org/gnome/desktop/interface" = {

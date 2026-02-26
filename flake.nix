@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,8 +18,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, alacritty-theme, gnome-catppuccin, nixos-fingerprint-sensor, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-stable, home-manager, alacritty-theme, gnome-catppuccin, nixos-fingerprint-sensor, ... }@inputs:
   let
+    pkgs-stable = import nixpkgs-stable { system = "x86_64-linux"; };
+
     overlays = [
       alacritty-theme.overlays.default
       (final: prev: {
@@ -41,7 +44,7 @@
           home-manager.backupFileExtension = "old";
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit hostname; };
+          home-manager.extraSpecialArgs = { inherit hostname pkgs-stable; };
           nixpkgs.overlays = overlays;
         }
       ] ++ extraModules;
