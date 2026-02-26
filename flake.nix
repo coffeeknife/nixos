@@ -23,6 +23,11 @@
       alacritty-theme.overlays.default
       (final: prev: {
         gnome-catppuccin = final.callPackage "${gnome-catppuccin}" {};
+        python313Packages = prev.python313Packages.overrideScope (pyFinal: pyPrev: {
+          picosvg = pyPrev.picosvg.overridePythonAttrs {
+            doCheck = false;
+          };
+        });
       })
     ];
 

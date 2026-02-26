@@ -104,6 +104,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.download-buffer-size = 128 * 1024 * 1024; # 128 MiB
   environment.systemPackages = with pkgs; [
     vim
     wget
