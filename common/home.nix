@@ -38,7 +38,6 @@ in
     go
 
     # apps
-    winboat
     (appimageTools.wrapType2 rec {
       name = "BambuStudio";
       pname = "bambu-studio";
