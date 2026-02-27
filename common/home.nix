@@ -167,6 +167,7 @@ in
     gnomeExtensions.user-themes
     gnomeExtensions.desktop-icons-ng-ding
     gnomeExtensions.edit-desktop-files
+    gnomeExtensions.steal-my-focus-window
     (gnomeExtensions.runcat.overrideAttrs (old: {
       postFixup = (old.postFixup or "") + ''
         substituteInPlace $out/share/gnome-shell/extensions/runcat@kolesnikov.se/extension.js \
@@ -321,6 +322,7 @@ in
           user-themes.extensionUuid
           desktop-icons-ng-ding.extensionUuid
           edit-desktop-files.extensionUuid
+          steal-my-focus-window.extensionUuid
           runcat.extensionUuid
           gsconnect.extensionUuid
           "claude-code-usage@haletran.com"
