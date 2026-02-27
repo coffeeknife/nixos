@@ -6,6 +6,12 @@
   ];
 
   hardware.sensor.iio.enable = true;
+
+  # Intel 8265 WiFi+BT share one antenna — performance power scheme reduces
+  # contention and fixes Bluetooth audio dropouts
+  boot.extraModprobeConfig = ''
+    options iwlmvm power_scheme=1
+  '';
   services.thermald.enable = true;
 
   # Compressed in-memory swap — prevents freezes when RAM fills up
