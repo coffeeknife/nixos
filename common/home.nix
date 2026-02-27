@@ -157,6 +157,7 @@ in
 
     # gnome
     fairywren
+    galaxy-buds-client
     gnome-tweaks
     gnome-catppuccin
     gnome-remote-desktop
