@@ -16,6 +16,11 @@
     "usb_role"
   ];
 
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 180;        # Prefer zram over evicting file cache
+    "vm.vfs_cache_pressure" = 50; # Keep filesystem caches longer
+  };
+
   networking.hostName = hostname;
 
   # Enable networking

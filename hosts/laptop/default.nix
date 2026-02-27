@@ -8,6 +8,13 @@
   hardware.sensor.iio.enable = true;
   services.thermald.enable = true;
 
+  # Compressed in-memory swap — prevents freezes when RAM fills up
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
   # fingerprint scanner (138a:0097 needs python-validity + open-fprintd)
   services.python-validity.enable = true;
   services.open-fprintd.enable = true;
