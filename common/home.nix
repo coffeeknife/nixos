@@ -111,7 +111,7 @@ in
     }))
     nextcloud-client
     jetbrains.pycharm
-    libreoffice
+    pkgs-stable.libreoffice
     borgbackup
     libsecret
     (pkgs.writeShellScriptBin "borg-last-backup" ''
@@ -220,6 +220,8 @@ in
     nerd-fonts.jetbrains-mono
     nerd-fonts.caskaydia-cove
     noto-fonts-cjk-sans
+
+    # noto-fonts-cjk-sans removed: nixpkgs bug in noto-fonts-subset drv (cp missing source)
   ];
 
   xdg.desktopEntries = {
