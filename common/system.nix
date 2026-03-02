@@ -70,6 +70,21 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Required for .local mDNS resolution (e.g. printer hostnames)
+  services.avahi.nssmdns4 = true;
+
+  hardware.printers = {
+    ensurePrinters = [{
+      name = "Brother-MFC-L2740DW";
+      description = "Brother MFC-L2740DW series";
+      location = "Home";
+      deviceUri = "ipp://192.168.1.52:631/ipp/print";
+      model = "everywhere";
+      ppdOptions.PageSize = "Letter";
+    }];
+    ensureDefaultPrinter = "Brother-MFC-L2740DW";
+  };
+
   # KDE Connect / GSConnect
   networking.firewall.allowedTCPPortRanges = [{ from = 1714; to = 1764; }];
   networking.firewall.allowedUDPPortRanges = [{ from = 1714; to = 1764; }];

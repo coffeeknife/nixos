@@ -55,5 +55,5 @@
     type = "basic";
   }];
 
-  home-manager.users.robin = import ./home.nix;
+home-manager.users.robin = import ./home.nix;
 }
