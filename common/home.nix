@@ -99,6 +99,7 @@ in
     orca-slicer
     pkgs-stable.openscad
     element-desktop
+    fluffychat
     claude-code
     bitwarden-desktop
     (protonmail-desktop.overrideAttrs (oldAttrs: {
