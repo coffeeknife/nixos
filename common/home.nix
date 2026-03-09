@@ -36,6 +36,7 @@ in
     usbutils
     pciutils
     go
+    doctl
 
     # apps
     (appimageTools.wrapType2 rec {
