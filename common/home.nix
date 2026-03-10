@@ -369,13 +369,14 @@ in
     };
   };
 
-  home.file.".config/Brave Software/Policies/managed/policies.json".text = ''
-  {
-    "BraveRewardsDisabled": true,
-    "BraveWalletDisabled": true,
-    "LeoAssistantDisabled": true
-  }
-  '';
+  home.file.".config/BraveSoftware/Brave-Browser/policies/managed/policies.json".text = builtins.toJSON {
+    BraveRewardsDisabled = true;
+    BraveWalletDisabled = true;
+    LeoAssistantDisabled = true;
+    PasswordManagerEnabled = false;
+    AutofillAddressEnabled = false;
+    AutofillCreditCardEnabled = false;
+  };
 
   # Borg backup to vulcan over SSH
   home.activation.borgbackup-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

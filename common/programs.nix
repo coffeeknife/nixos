@@ -85,17 +85,7 @@ in
       { id = "mnjggcdmjocbbbhaepdhchncahnbgone"; } # SponsorBlock
       { id = "dhdgffkkebhmkfjojejmpbldmpobfkfo"; } # TamperMonkey
     ];
-    commandLineArgs = [
-      "--disable-features=PasswordManager,Autofill"
-    ];
-  };
-
-  home.file.".config/BraveSoftware/Brave-Browser/Default/Preferences" = {
-    force = true;
-    text = builtins.toJSON {
-      profile.password_manager_enabled = false;
-      autofill.enabled = false;
-    };
+    commandLineArgs = [];
   };
 
   programs.vesktop = {
