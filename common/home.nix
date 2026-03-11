@@ -98,6 +98,7 @@ in
     })
     orca-slicer
     pkgs-stable.openscad
+    pkgs-stable.freecad
     element-desktop
     fluffychat
     claude-code
