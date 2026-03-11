@@ -166,7 +166,19 @@ in
     gnome-remote-desktop
     gnomeExtensions.blur-my-shell
     gnomeExtensions.gsconnect
-    gnomeExtensions.dash-to-dock
+    (gnomeExtensions.dash-to-dock.overrideAttrs (old: {
+      postFixup = (old.postFixup or "") + ''
+        substituteInPlace $out/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com/intellihide.js \
+          --replace-fail \
+          "wa.connect('destroy', this._removeWindowSignals.bind(this));" \
+          "wa.connect('destroy', this._removeWindowSignals.bind(this));
+        const mw = wa.meta_window;
+        if (mw) {
+            mw.connect('notify::maximized-horizontally', this._checkOverlap.bind(this));
+            mw.connect('notify::maximized-vertically', this._checkOverlap.bind(this));
+        }"
+      '';
+    }))
     gnomeExtensions.appindicator
     gnomeExtensions.user-themes
     gnomeExtensions.desktop-icons-ng-ding
@@ -366,6 +378,10 @@ in
       };
       "org/gnome/shell/extensions/user-theme" = {
         name = "Gnome-catppuccin";
+      };
+      "org/gnome/shell/extensions/dash-to-dock" = {
+        intellihide = true;
+        intellihide-mode = "ALL_WINDOWS";
       };
     };
   };
