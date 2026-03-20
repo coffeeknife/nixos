@@ -59,12 +59,6 @@ let
       HOME=$TMPDIR bash install.sh -d $out/share/icons
     '';
   };
-  ulauncherLiquidGlass = pkgs.fetchFromGitHub {
-    owner = "kayozxo";
-    repo = "ulauncher-liquid-glass";
-    rev = "ecc50ce951e0ce38b98be9c37f8fff6b09ca1c58";
-    hash = "sha256-E/0v/tIbZgygXE77yIZb2C+zy4nPoOzBRB6WfJksqGM=";
-  };
 in
 {
   imports = [
@@ -369,7 +363,7 @@ in
           user-themes.extensionUuid
           open-bar.extensionUuid
           gnome-40-ui-improvements.extensionUuid
-          space-bar.extensionUuid
+          just-perfection.extensionUuid
           tiling-shell.extensionUuid
           vitals.extensionUuid
           desktop-icons-ng-ding.extensionUuid
@@ -391,7 +385,7 @@ in
           "codium.desktop"
           "cider.desktop"
           "BambuStudio.desktop"
-          "freecad.desktop"
+          "org.freecad.FreeCAD.desktop"
         ];
       };
       "org/gnome/desktop/interface" = {
@@ -417,6 +411,87 @@ in
         intellihide = true;
         intellihide-mode = "ALL_WINDOWS";
       };
+      "org/gnome/shell/extensions/blur-my-shell" = {
+        settings-version = 2;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
+        blur = false;
+        brightness = 0.6;
+        sigma = 30;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/applications" = {
+        blacklist = [ "Plank" "com.desktop.ding" "ding" "Conky" "codium" "BambuStudio" "gjs" ];
+        blur = true;
+        dynamic-opacity = false;
+        enable-all = true;
+        sigma = 50;
+        whitelist = [];
+      };
+      "org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
+        blur = true;
+        brightness = 0.6;
+        override-background = true;
+        pipeline = "pipeline_default_rounded";
+        sigma = 30;
+        static-blur = true;
+        style-dash-to-dock = 0;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/overview" = {
+        blur = false;
+        pipeline = "pipeline_default";
+      };
+      "org/gnome/shell/extensions/blur-my-shell/panel" = {
+        blur = false;
+        brightness = 0.6;
+        pipeline = "pipeline_default";
+        sigma = 30;
+      };
+      "org/gnome/shell/extensions/openbar" = {
+        apply-accent-shell = true;
+        apply-all-shell = true;
+        apply-menu-notif = true;
+        apply-menu-shell = true;
+        bartype = "Floating";
+        bg-change = true;
+        bgalpha = 0.5;
+        bgalpha-wmax = 0.8;
+        bgalpha2 = 0.11;
+        bguri = "file:///home/robin/.wallpaper";
+        boxalpha = 0.0;
+        bwidth = 0.0;
+        dark-bguri = "file:///home/robin/.wallpaper";
+        dark-palette1 = [ "37" "42" "67" ];
+        dark-palette2 = [ "219" "224" "241" ];
+        dark-palette3 = [ "75" "90" "143" ];
+        dark-palette4 = [ "122" "202" "240" ];
+        dark-palette5 = [ "103" "120" "192" ];
+        dark-palette6 = [ "85" "69" "92" ];
+        dark-palette7 = [ "125" "95" "120" ];
+        dark-palette8 = [ "17" "12" "23" ];
+        dark-palette9 = [ "183" "93" "113" ];
+        dark-palette10 = [ "192" "120" "88" ];
+        dark-palette11 = [ "75" "113" "107" ];
+        dark-palette12 = [ "75" "189" "112" ];
+        gradient = false;
+        mbg-gradient = true;
+        mbgalpha = 0.75;
+        neon = false;
+        palette1 = [ "37" "42" "67" ];
+        palette2 = [ "219" "224" "241" ];
+        palette3 = [ "75" "90" "143" ];
+        palette4 = [ "122" "202" "240" ];
+        palette5 = [ "103" "120" "192" ];
+        palette6 = [ "85" "69" "92" ];
+        palette7 = [ "125" "95" "120" ];
+        palette8 = [ "17" "12" "23" ];
+        palette9 = [ "183" "93" "113" ];
+        palette10 = [ "192" "120" "88" ];
+        palette11 = [ "75" "113" "107" ];
+        palette12 = [ "75" "189" "112" ];
+        set-notif-position = true;
+        wmaxbar = true;
+        wmax-hbarhint = false;
+      };
     };
   };
 
@@ -425,9 +500,6 @@ in
     name = "WhiteSur-cursors";
     package = pkgs.whitesur-cursors;
   };
-
-  # Ulauncher liquid-glass theme
-  xdg.configFile."ulauncher/user-themes/liquid-glass".source = ulauncherLiquidGlass;
 
   # Libadwaita override — applies Tahoe theme to GTK4/libadwaita apps
   home.activation.tahoe-libadwaita = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
