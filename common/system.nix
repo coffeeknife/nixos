@@ -55,6 +55,19 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
+  # GDM login screen — use Tahoe wallpaper as background
+  programs.dconf.profiles.gdm.databases = [{
+    settings."org/gnome/desktop/background" = {
+      picture-uri = "file:///run/current-system/sw/share/backgrounds/Tahoe/(76).png";
+      picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/Tahoe/(76).png";
+      picture-options = "zoom";
+    };
+    settings."org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      cursor-theme = "WhiteSur-cursors";
+    };
+  }];
+
   # Disable GNOME's SSH agent so Bitwarden's agent is used instead
   services.gnome.gcr-ssh-agent.enable = false;
 
@@ -139,6 +152,24 @@
 
     xdg-desktop-portal
     xdg-desktop-portal-gnome
+
+    # System-wide for GDM: Tahoe wallpapers + WhiteSur cursors
+    whitesur-cursors
+    (pkgs.stdenvNoCC.mkDerivation {
+      pname = "gnome-macos-tahoe-backgrounds";
+      version = "unstable-2026-01-17";
+      src = pkgs.fetchFromGitHub {
+        owner = "kayozxo";
+        repo = "GNOME-macOS-Tahoe";
+        rev = "195443b38d80f1ec4971ebae9a7277df6d12bc10";
+        hash = "sha256-A0YOqjvWC41TCg2SymLEyXrNX2ArElyezJzh0Q1Hsd0=";
+      };
+      dontBuild = true;
+      installPhase = ''
+        mkdir -p $out/share/backgrounds
+        cp -r .config/walls/Tahoe $out/share/backgrounds/
+      '';
+    })
   ];
 
   environment.variables.EDITOR = "vim";

@@ -4,6 +4,67 @@ let
   borgKeyFile = "${config.home.homeDirectory}/.ssh/borg_ed25519";
   borgKeyringAttr = "borg-passphrase-${hostname}";
   secretTool = "${pkgs.libsecret}/bin/secret-tool";
+  cider = pkgs.appimageTools.wrapType2 rec {
+    name = "Cider";
+    pname = "cider";
+    version = "3.1.8";
+    src = pkgs.requireFile {
+      name = "cider-v3.1.8-linux-x64.AppImage";
+      sha256 = "b3508c6007c350b684c8ed23660b80d9b03b0fba20a91478bff2e4303fa5b8ac"; # replace with real hash
+      message = ''
+        Cider 2 must be downloaded manually from itch.io.
+        Download it from https://https://taproom.cider.sh/dashboard
+        Then add it to the Nix store:
+          nix-store --add-fixed sha256 /path/to/Cider-linux-x64.AppImage
+      '';
+    };
+    extraInstallCommands = let
+      appimageContents = pkgs.appimageTools.extract { inherit pname version src; };
+    in ''
+      install -m 444 -D ${appimageContents}/Cider.png $out/share/icons/hicolor/256x256/apps/cider.png
+    '';
+  };
+  gnomeMacosTahoe = pkgs.stdenvNoCC.mkDerivation {
+    pname = "gnome-macos-tahoe";
+    version = "unstable-2026-01-17";
+    src = pkgs.fetchFromGitHub {
+      owner = "kayozxo";
+      repo = "GNOME-macOS-Tahoe";
+      rev = "195443b38d80f1ec4971ebae9a7277df6d12bc10";
+      hash = "sha256-A0YOqjvWC41TCg2SymLEyXrNX2ArElyezJzh0Q1Hsd0=";
+    };
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/share/themes
+      cp -r gtk/Tahoe-Dark $out/share/themes/
+      cp -r gtk/Tahoe-Light $out/share/themes/
+      mkdir -p $out/share/backgrounds
+      cp -r .config/walls/Tahoe $out/share/backgrounds/
+      cp .config/walls/Tahoe.xml $out/share/backgrounds/
+    '';
+  };
+  macTahoeIcons = pkgs.stdenvNoCC.mkDerivation {
+    pname = "mactahoe-icon-theme";
+    version = "unstable-2024";
+    src = pkgs.fetchFromGitHub {
+      owner = "vinceliuice";
+      repo = "MacTahoe-icon-theme";
+      rev = "2eab293c496924a5835d9fcac407fbe9c975e8cd";
+      hash = "sha256-a21zLinYTG6fpdQhKcn/3GzVUKd0bQOnY74609C5I7k=";
+    };
+    nativeBuildInputs = [ pkgs.gtk3 ];
+    dontBuild = true;
+    installPhase = ''
+      mkdir -p $out/share/icons
+      HOME=$TMPDIR bash install.sh -d $out/share/icons
+    '';
+  };
+  ulauncherLiquidGlass = pkgs.fetchFromGitHub {
+    owner = "kayozxo";
+    repo = "ulauncher-liquid-glass";
+    rev = "ecc50ce951e0ce38b98be9c37f8fff6b09ca1c58";
+    hash = "sha256-E/0v/tIbZgygXE77yIZb2C+zy4nPoOzBRB6WfJksqGM=";
+  };
 in
 {
   imports = [
@@ -74,29 +135,7 @@ in
           --replace-fail 'Exec=AppRun' 'Exec=bambu-studio'
       '';
     })
-    (appimageTools.wrapType2 rec {
-      name = "Cider";
-      pname = "cider";
-      version = "3.1.8";
-
-      src = pkgs.requireFile {
-        name = "cider-v3.1.8-linux-x64.AppImage";
-        sha256 = "b3508c6007c350b684c8ed23660b80d9b03b0fba20a91478bff2e4303fa5b8ac"; # replace with real hash
-        message = ''
-          Cider 2 must be downloaded manually from itch.io.
-          Download it from https://https://taproom.cider.sh/dashboard
-          Then add it to the Nix store:
-            nix-store --add-fixed sha256 /path/to/Cider-linux-x64.AppImage
-        '';
-      };
-
-      extraInstallCommands = let
-        appimageContents = pkgs.appimageTools.extract { inherit pname version src; };
-      in ''
-        install -m 444 -D ${appimageContents}/Cider.png $out/share/icons/hicolor/256x256/apps/cider.png
-      '';
-    })
-    orca-slicer
+    cider
     pkgs-stable.openscad
     pkgs-stable.freecad
     element-desktop
@@ -159,11 +198,12 @@ in
     '')
 
     # gnome
-    fairywren
     galaxy-buds-client
     gnome-tweaks
-    gnome-catppuccin
     gnome-remote-desktop
+    gnomeMacosTahoe
+    macTahoeIcons
+    whitesur-cursors
     gnomeExtensions.blur-my-shell
     gnomeExtensions.gsconnect
     (gnomeExtensions.dash-to-dock.overrideAttrs (old: {
@@ -181,6 +221,11 @@ in
     }))
     gnomeExtensions.appindicator
     gnomeExtensions.user-themes
+    gnomeExtensions.open-bar
+    gnomeExtensions.gnome-40-ui-improvements
+    gnomeExtensions.space-bar
+    gnomeExtensions.tiling-shell
+    gnomeExtensions.vitals
     gnomeExtensions.desktop-icons-ng-ding
     gnomeExtensions.edit-desktop-files
     gnomeExtensions.steal-my-focus-window
@@ -240,17 +285,6 @@ in
   ];
 
   xdg.desktopEntries = {
-    OrcaSlicer = {
-      name = "OrcaSlicer";
-      genericName = "3D Printing Software";
-      icon = "${pkgs.orca-slicer}/share/icons/hicolor/192x192/apps/OrcaSlicer.png";
-      exec = "orca-slicer %U";
-      terminal = false;
-      categories = [ "Graphics" "3DGraphics" "Engineering" ];
-      mimeType = [ "model/stl" "model/3mf" "application/vnd.ms-3mfdocument" "application/prs.wavefront-obj" "application/x-amf" "x-scheme-handler/orcaslicer" ];
-      startupNotify = false;
-      settings.StartupWMClass = "orca-slicer";
-    };
     borg-browse = {
       name = "Browse Backups";
       comment = "Mount and browse borg backup archives";
@@ -301,24 +335,19 @@ in
     entries = [
       "${pkgs.nextcloud-client}/share/applications/nextcloud-client.desktop"
       "${pkgs.bitwarden-desktop}/share/applications/bitwarden-desktop.desktop"
+      "${pkgs.element-desktop}/share/applications/element-desktop.desktop"
     ];
   };
-
-  xdg.configFile."autostart/vesktop.desktop".source =
-    "${pkgs.vesktop}/share/applications/vesktop.desktop";
 
   gtk = {
     enable = true;
     theme = {
-      name = "catppuccin-mocha-blue-compact";
-      package = pkgs.catppuccin-gtk.override {
-        variant = "mocha";
-        size = "compact";
-      };
+      name = "Tahoe-Dark";
+      package = gnomeMacosTahoe;
     };
     iconTheme = {
-      name = "FairyWren_Dark";
-      package = pkgs.fairywren;
+      name = "MacTahoe";
+      package = macTahoeIcons;
     };
     gtk3.extraConfig = {
       "gtk-application-prefer-dark-theme" = true;
@@ -338,6 +367,11 @@ in
           dash-to-dock.extensionUuid
           appindicator.extensionUuid
           user-themes.extensionUuid
+          open-bar.extensionUuid
+          gnome-40-ui-improvements.extensionUuid
+          space-bar.extensionUuid
+          tiling-shell.extensionUuid
+          vitals.extensionUuid
           desktop-icons-ng-ding.extensionUuid
           edit-desktop-files.extensionUuid
           steal-my-focus-window.extensionUuid
@@ -352,20 +386,20 @@ in
           "brave-browser.desktop"
           "org.gnome.Calendar.desktop"
           "proton-mail.desktop"
-          "vesktop.desktop"
           "element-desktop.desktop"
           "org.gnome.Console.desktop"
           "codium.desktop"
           "cider.desktop"
           "BambuStudio.desktop"
-          "OrcaSlicer.desktop"
-          "openscad.desktop"
+          "freecad.desktop"
         ];
       };
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
         clock-format = "12h";
         clock-show-weekday = true;
+        cursor-theme = "WhiteSur-cursors";
+        icon-theme = "MacTahoe";
       };
       "org/gnome/Console" = {
         use-system-font = false;
@@ -377,7 +411,7 @@ in
         picture-options = "zoom";
       };
       "org/gnome/shell/extensions/user-theme" = {
-        name = "Gnome-catppuccin";
+        name = "Tahoe-Dark";
       };
       "org/gnome/shell/extensions/dash-to-dock" = {
         intellihide = true;
@@ -385,6 +419,29 @@ in
       };
     };
   };
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    name = "WhiteSur-cursors";
+    package = pkgs.whitesur-cursors;
+  };
+
+  # Ulauncher liquid-glass theme
+  xdg.configFile."ulauncher/user-themes/liquid-glass".source = ulauncherLiquidGlass;
+
+  # Libadwaita override — applies Tahoe theme to GTK4/libadwaita apps
+  home.activation.tahoe-libadwaita = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD mkdir -p "${config.home.homeDirectory}/.config/gtk-4.0"
+    $DRY_RUN_CMD cp -rf "${gnomeMacosTahoe}/share/themes/Tahoe-Dark/gtk-4.0/." "${config.home.homeDirectory}/.config/gtk-4.0/"
+  '';
+
+  # Install Tahoe wallpapers for use in GNOME wallpaper picker
+  home.activation.tahoe-wallpapers = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD mkdir -p "${config.home.homeDirectory}/.local/share/backgrounds"
+    $DRY_RUN_CMD mkdir -p "${config.home.homeDirectory}/.local/share/gnome-background-properties"
+    $DRY_RUN_CMD cp -rf "${gnomeMacosTahoe}/share/backgrounds/Tahoe" "${config.home.homeDirectory}/.local/share/backgrounds/"
+    $DRY_RUN_CMD cp -f "${gnomeMacosTahoe}/share/backgrounds/Tahoe.xml" "${config.home.homeDirectory}/.local/share/gnome-background-properties/"
+  '';
 
   home.file.".config/BraveSoftware/Brave-Browser/policies/managed/policies.json".text = builtins.toJSON {
     BraveRewardsDisabled = true;
@@ -394,6 +451,12 @@ in
     AutofillAddressEnabled = false;
     AutofillCreditCardEnabled = false;
   };
+
+  # Keep Cider pinned as a GC root so nix-collect-garbage never removes it
+  home.activation.cider-gc-root = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD mkdir -p "${config.home.homeDirectory}/.local/share/nix/gcroots"
+    $DRY_RUN_CMD ln -sfn ${cider} "${config.home.homeDirectory}/.local/share/nix/gcroots/cider"
+  '';
 
   # Borg backup to vulcan over SSH
   home.activation.borgbackup-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
